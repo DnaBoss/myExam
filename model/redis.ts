@@ -10,10 +10,12 @@ module.exports = class RedisDao {
         console.log('config.get("dev.redis.host") = ', dbConfig.dev.redis.host);
     }
 
+    // 取得 redis 單例
     public static getInstance() {
         return this._instance = this._instance || new RedisDao();
     }
 
+    // 對 redis 取得使用者請求次數
     public setUserRequestTime(ip: string, requestTime: number[]) {
         const multi = client.multi();
         const key = `ip:${ip}`;
@@ -30,6 +32,7 @@ module.exports = class RedisDao {
         });
     }
 
+    // 對 redis 取得使用者請求次數
     async getUserRequesTime(ip: string) {
         return new Promise((resolve, reject) => {
             client.lrange(`ip:${ip}`, 0, -1, (err, results) => {

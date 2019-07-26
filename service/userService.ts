@@ -6,20 +6,19 @@ module.exports = class UserService {
     constructor() {
 
     }
+
+    // 記錄使用者每分鐘請求次數
     async setUserRequestTime(ip: string, requestTime: number[]) {
         return await redisDao.setUserRequestTime(ip, requestTime);
     }
 
-    getUserRequesTime(ip: string) {
+    // 取得使用者最近一分鐘請求次數
+    public getUserRequesTime(ip: string) {
         return redisDao.getUserRequesTime(ip);
     }
 
+    // 把超過最近一分鐘前的記錄過濾掉
     public filterRequestTime(now: number, requestTimes: number[]) {
-        console.log('now = ', now);
-        console.log('requestTimes befor filter = ', requestTimes);
-        requestTimes = requestTimes.filter(requestTime => now - requestTime < (60 * 1000));
-        console.log('requestTimes after filter = ', requestTimes);
-        console.log('requestTimes = ', requestTimes.length);
-        return requestTimes
+        return requestTimes.filter(requestTime => now - requestTime < (60 * 1000));
     }
 }
